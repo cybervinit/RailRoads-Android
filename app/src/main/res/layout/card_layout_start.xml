@@ -20,7 +20,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:id="@+id/start_textview"
                 android:layout_marginTop="35dp"
                 android:layout_marginRight="25dp"
@@ -34,14 +34,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/begin_button"
                 android:text="Let's Begin!"
-                android:textSize="40dp"
+                android:textSize="16sp"
                 android:layout_gravity="center_horizontal"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="66dp"
-                android:background="#fd4080"
-                android:paddingRight="5dp"
-                android:paddingLeft="5dp"/>
+                android:background="@drawable/button_quality"
+                android:elevation="10dp"
+                android:paddingRight="15dp"
+                android:paddingLeft="15dp"/>
 
 
         </RelativeLayout>

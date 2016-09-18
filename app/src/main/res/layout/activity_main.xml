@@ -9,15 +9,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.railroads.railroads.MainActivity">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="65dp"
+        android:text="RailRoads"
+        android:textColor="#000000"
+        android:textSize="55sp"/>
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/start_button"
         android:id="@+id/start_button"
-        style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_centerVertical="true"
+        android:background="@drawable/button_quality"
+        android:padding="50dp"
+        android:textSize="75sp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:textColor="#ecfba1"
-        android:textSize="75sp" />
+        android:layout_marginBottom="82dp" />
 
 </RelativeLayout>

@@ -3,5 +3,5 @@
     <string name="start_button">Start</string>
     <string name="next_button">Next</string>
     <string name="question_placeholder">--Question Placeholder----Question Placeholder----Question Placeholder----Question Placeholder--</string>
-    <string name="instructions">1. Click next for the next question \n\n2. Answer the current question to go to the next question\n\n3. Answer each question truthfully for the best experience</string>
+    <string name="instructions">1. Click next for the next question \n\n2. Scroll down\n\n3. Answer each question truthfully for the best experience</string>
 </resources>

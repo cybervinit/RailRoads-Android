@@ -1,6 +1,7 @@
 package com.example.railroads.railroads;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -105,43 +106,42 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         final int itemType = getItemViewType(position);
-        Log.d("||||||||||||||||||", ""+itemType);
         if (itemType == START_CARD) {
             ((ViewHolder0)holder).mStartTips.setText(R.string.instructions);
             ((ViewHolder0)holder).httpTest1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("CURRENT CARD", "0");
-                    dataset.add(dataset.size(), new AdvQuestion("This is Question 1!", 1));
-                    notifyDataSetChanged();
                     // get data from server.
-                    new NetRequest(0, new PostAsync() {
+                    new NetRequest("GET", 0, new PostAsync() {
                         @Override
                         public void PostAsyncTask(String json) {
-
+                            dataset.add(dataset.size(), new AdvQuestion(json, 1));
                             //questionDataSet.add(questionDataSet.size(), json);
                         }
                     }).execute();
+                    dataset.add(dataset.size(), new AdvQuestion("This is a test", 1));
+                    notifyDataSetChanged();
                 }
             });
+
+
         } else if (itemType == CHOICES_CARD) {
             ((ViewHolder1)holder).mQuestionTextView.setText(dataset.get(position).getQuestion());
             ((ViewHolder1)holder).httpTest1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("CURRENT CARD", "1");
                     dataset.add(dataset.size(), new AdvQuestion("This is Question 2!", 2));
-                    notifyDataSetChanged();
+
                     // get data from server.
-                    new NetRequest(0, new PostAsync() {
+                    new NetRequest("GET", 0, new PostAsync() {
                         @Override
                         public void PostAsyncTask(String json) {
-
                             //questionDataSet.add(questionDataSet.size(), json);
                         }
                     }).execute();
+                    notifyDataSetChanged();
                 }
             });
         } else if (itemType == SLIDER_CARD) {
@@ -149,8 +149,12 @@ public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ((ViewHolder2)holder).httpTest1.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.d("CURRENT CARD", "2");
                     dataset.add(dataset.size(), new AdvQuestion("This is Question 3!", 1));
+                    new NetRequest("GET", 0, new PostAsync() {
+                        @Override
+                        public void PostAsyncTask(String json) {
+                        }
+                    }).execute();
                     notifyDataSetChanged();
                 }
             });
