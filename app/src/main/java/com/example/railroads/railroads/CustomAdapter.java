@@ -1,10 +1,15 @@
 package com.example.railroads.railroads;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -26,25 +31,34 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         private String question;
 
         private TextView mQuestionTextView;
+        private Button httpTest1;
+        private Context context;
+
+        // Seeking
+        private SeekBar mSeekbar;
+        //Choices
+        private ArrayList<Button> mChoiceBtns;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
-            //Need to declare the data here.
         }
 
         public ViewHolder(View itemView, int questionType) {
             super(itemView);
 
-            if (questionType == 0) {
+            context = itemView.getContext();
+            mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
+            httpTest1 = (Button) itemView.findViewById(R.id.test_http_button);
+
+            if (questionType == 0) { // Start Card
                 mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
                 mQuestionTextView.setText(questionNumber+". "+question);
-                // Add choices!
-            } else if (questionType == 1) {
+
+            } else if (questionType == 1) { // Choices card
                 mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
                 mQuestionTextView.setText(questionNumber+". "+question);
                 // Add Slider!
-            } else {
+            } else { // Slider Card
                 mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
                 mQuestionTextView.setText(questionNumber+". "+question);
             }
@@ -73,6 +87,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.mQuestionTextView.setText(dataset.get(position));
+        holder.httpTest1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dataset.add(dataset.size(), "This is a new index!"+dataset.size()+1);
+                // get data from server.
+                new NetRequest(0, new PostAsync() {
+                    @Override
+                    public void PostAsyncTask(String json) {
+
+                        //questionDataSet.add(questionDataSet.size(), json);
+                    }
+                }).execute();
+            }
+        });
     }
 
     @Override
