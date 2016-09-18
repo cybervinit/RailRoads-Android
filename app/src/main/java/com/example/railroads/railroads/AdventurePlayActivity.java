@@ -15,7 +15,8 @@ public class AdventurePlayActivity extends Activity {
     private RecyclerView.Adapter mRecViewAdapter;
     private RecyclerView.LayoutManager mRecViewLayoutManager;
 
-    ArrayList<String> questionDataSet;
+    ArrayList<AdvQuestion> questionDataSet;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,14 +26,16 @@ public class AdventurePlayActivity extends Activity {
         rv = (RecyclerView) findViewById(R.id.recycler_view);
 
         questionDataSet = new ArrayList<>();
-        questionDataSet.add(0, "This is a string");
-        questionDataSet.add(1, "This is a string 2");
+
+        questionDataSet.add(questionDataSet.size(), new AdvQuestion("This is question 1!", 0));
 
         mRecViewAdapter = new CustomAdapter(questionDataSet);
         mRecViewLayoutManager = new LinearLayoutManager(getApplicationContext());
         rv.setLayoutManager(mRecViewLayoutManager);
         rv.setAdapter(mRecViewAdapter);
         mRecViewAdapter.notifyDataSetChanged();
+
+
 
 
 

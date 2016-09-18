@@ -18,89 +18,146 @@ import java.util.ArrayList;
 /**
  * Created by Vinit Soni on 2016-09-17.
  */
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-    private ArrayList<String> dataset;
+public class CustomAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private final int START_CARD = 0;
+    private final int CHOICES_CARD = 1;
+    private final int SLIDER_CARD = 2;
+
+    private ArrayList<AdvQuestion> dataset;
     private int questionType;
 
-    public CustomAdapter (ArrayList<String> dataset) {
+    public CustomAdapter (ArrayList<AdvQuestion> dataset) {
         this.dataset = dataset;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private int questionNumber;
-        private String question;
+    public static class ViewHolder0 extends RecyclerView.ViewHolder {
+        private TextView mStartTips;
+        private Button httpTest1;
+
+        public ViewHolder0(View itemView) {
+            super(itemView);
+            mStartTips = (TextView) itemView.findViewById(R.id.start_textview);
+            httpTest1 = (Button) itemView.findViewById(R.id.begin_button);
+        }
+    }
+
+    public static class ViewHolder1 extends RecyclerView.ViewHolder {
 
         private TextView mQuestionTextView;
         private Button httpTest1;
-        private Context context;
 
-        // Seeking
-        private SeekBar mSeekbar;
         //Choices
         private ArrayList<Button> mChoiceBtns;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder1(View itemView) {
             super(itemView);
+            mQuestionTextView = (TextView) itemView.findViewById(R.id.choices_question_textview);
+            httpTest1 = (Button) itemView.findViewById(R.id.next_choices_button);
         }
+    }
 
-        public ViewHolder(View itemView, int questionType) {
+    public static class ViewHolder2 extends RecyclerView.ViewHolder {
+
+        private TextView mQuestionTextView;
+        private Button httpTest1;
+
+        //Choices
+        private SeekBar mSeekBar;
+
+        public ViewHolder2(View itemView) {
             super(itemView);
-
-            context = itemView.getContext();
-            mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
-            httpTest1 = (Button) itemView.findViewById(R.id.test_http_button);
-
-            if (questionType == 0) { // Start Card
-                mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
-                mQuestionTextView.setText(questionNumber+". "+question);
-
-            } else if (questionType == 1) { // Choices card
-                mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
-                mQuestionTextView.setText(questionNumber+". "+question);
-                // Add Slider!
-            } else { // Slider Card
-                mQuestionTextView = (TextView) itemView.findViewById(R.id.question_textview);
-                mQuestionTextView.setText(questionNumber+". "+question);
-            }
+            mQuestionTextView = (TextView) itemView.findViewById(R.id.slider_question_textview);
+            httpTest1 = (Button) itemView.findViewById(R.id.next_slider_button);
+            mSeekBar = (SeekBar) itemView.findViewById(R.id.seekBar);
         }
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public int getItemViewType(int position) {
+        if (dataset.get(position).getQuestionType() == 0) {
+            return START_CARD;
+        } else if (dataset.get(position).getQuestionType() == 1) {
+            return CHOICES_CARD;
+        } else if (dataset.get(position).getQuestionType() == 2) {
+            return SLIDER_CARD;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_choices, parent, false);
-        if (questionType == 0) {
+        if (viewType == START_CARD) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_start, parent, false);
+            return new ViewHolder0(v);
+        } else if (viewType == CHOICES_CARD) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_choices, parent, false);
+            return new ViewHolder1(v);
+        } else if (viewType == SLIDER_CARD) {
+            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_slider, parent, false);
+            return new ViewHolder2(v);
+        } else {
+            return null;
         }
-        else {
-            v = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_layout_choices, parent, false);
-        }
-
-
-
-        ViewHolder viewHolder = new ViewHolder(v, questionType);
-
-        return viewHolder;
     }
 
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.mQuestionTextView.setText(dataset.get(position));
-        holder.httpTest1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dataset.add(dataset.size(), "This is a new index!"+dataset.size()+1);
-                // get data from server.
-                new NetRequest(0, new PostAsync() {
-                    @Override
-                    public void PostAsyncTask(String json) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        final int itemType = getItemViewType(position);
+        Log.d("||||||||||||||||||", ""+itemType);
+        if (itemType == START_CARD) {
+            ((ViewHolder0)holder).mStartTips.setText(R.string.instructions);
+            ((ViewHolder0)holder).httpTest1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("CURRENT CARD", "0");
+                    dataset.add(dataset.size(), new AdvQuestion("This is Question 1!", 1));
+                    notifyDataSetChanged();
+                    // get data from server.
+                    new NetRequest(0, new PostAsync() {
+                        @Override
+                        public void PostAsyncTask(String json) {
 
-                        //questionDataSet.add(questionDataSet.size(), json);
-                    }
-                }).execute();
-            }
-        });
+                            //questionDataSet.add(questionDataSet.size(), json);
+                        }
+                    }).execute();
+                }
+            });
+        } else if (itemType == CHOICES_CARD) {
+            ((ViewHolder1)holder).mQuestionTextView.setText(dataset.get(position).getQuestion());
+            ((ViewHolder1)holder).httpTest1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("CURRENT CARD", "1");
+                    dataset.add(dataset.size(), new AdvQuestion("This is Question 2!", 2));
+                    notifyDataSetChanged();
+                    // get data from server.
+                    new NetRequest(0, new PostAsync() {
+                        @Override
+                        public void PostAsyncTask(String json) {
+
+                            //questionDataSet.add(questionDataSet.size(), json);
+                        }
+                    }).execute();
+                }
+            });
+        } else if (itemType == SLIDER_CARD) {
+            ((ViewHolder2)holder).mQuestionTextView.setText(dataset.get(position).getQuestion());
+            ((ViewHolder2)holder).httpTest1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("CURRENT CARD", "2");
+                    dataset.add(dataset.size(), new AdvQuestion("This is Question 3!", 1));
+                    notifyDataSetChanged();
+                }
+            });
+        }
+
+
+
     }
 
     @Override

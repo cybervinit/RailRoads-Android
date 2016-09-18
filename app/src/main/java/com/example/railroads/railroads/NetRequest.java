@@ -31,7 +31,6 @@ public class NetRequest extends AsyncTask<String, String, String> {
     protected String doInBackground(String... strings) {
         String data = null;
         String dataURLparameters = "question="+"one";
-        Log.d("-->-->-->", "WORKS!");
         try {
             URL url = new URL("http://railroads.azurewebsites.net/");
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
